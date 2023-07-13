@@ -2,9 +2,12 @@ import Label from "./components/Label";
 import InputField from "./components/InputField";
 import Thumbnail from "./components/Thumbnail";
 import SelectInput from "./components/SelectInput";
+import Divider from "./components/Divider/Divider";
+import TextArea from "./components/TextArea/TextArea";
+import MultiselectInput from "./components/MultiselectInput/MultiselectInput";
 const NewSessionsForm = () => {
   return (
-    <div className="container mx-auto bg-gray-800 p-10 mt-10">
+    <div className="container mx-auto bg-gray-800 p-10 mt-10 h-[2000px]">
       <Label label="Session Title" />
       <InputField placeholder="Start Typing..." />
       <Label
@@ -28,7 +31,13 @@ const NewSessionsForm = () => {
           <SelectInput />
         </div>
       </div>
+      <Divider />
+      <Label label="Description" />
+      <TextArea />
+      <MultiselectInput/>
     </div>
   );
 };
 export default NewSessionsForm;
+
+
