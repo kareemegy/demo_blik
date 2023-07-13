@@ -18,7 +18,8 @@ const useCloudinaryUpload = () => {
     try {
       const img = await createImageBitmap(file);
       if (img.width > 800 || img.height > 400) {
-        const errorMessage = "Image dimensions must be 800x400 or smaller,please try again.";
+        const errorMessage =
+          "Image dimensions must be 800x400 or smaller,please try again.";
         setError({ error: errorMessage });
         throw new Error(errorMessage);
       }
@@ -37,8 +38,8 @@ const useCloudinaryUpload = () => {
       const data = (await response.json()) as CloudinaryResponse;
       setImageUrl(data.secure_url);
     } catch (error) {
-      const errorMessage = "Something went wrong. Please try again later.";
-      setError({ error: errorMessage });
+      // const errorMessage = "Something went wrong. Please try again later.";
+      // setError({ error: errorMessage });
       console.error(error);
     } finally {
       setIsLoading(false);

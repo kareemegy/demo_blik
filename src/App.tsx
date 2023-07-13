@@ -78,19 +78,27 @@ const Thumbnail = () => {
   return (
     <div
       {...getRootProps({
-        className: "border border-dotted border-gray-400 py-10 ",
+        className: "border border-dotted border-gray-400  ",
       })}
     >
       <input {...getInputProps()} />
       <div className="flex flex-col justify-center items-center">
         {isLoading ? (
-          <p>Uploading...</p>
+          <p className="flex flex-col  items-center justify-center text-white h-[190px] py-10">
+            Uploading...
+          </p>
         ) : error ? (
-          <p className="text-white">{error?.error}</p>
+          <p className="flex  items-center justify-center text-white h-[190px] py-10">
+            {error?.error}
+          </p>
         ) : imageUrl ? (
-          <img className="w-full h-full" src={imageUrl} alt="uploaded image" />
+          <img
+            className="w-full h-[190px]"
+            src={imageUrl}
+            alt="uploaded image"
+          />
         ) : (
-          <div className="flex flex-col items-center">
+          <div className="flex flex-col items-center h-[190px] py-10">
             <img className="w-16 h-16 mb-3" src={Upload} alt="upload icon" />
             <div className="text-center">
               <p className="text-gray-300 text-lg">
@@ -109,27 +117,3 @@ const Thumbnail = () => {
     </div>
   );
 };
-{
-  /* <div className="flex flex-col justify-center items-center">
-{isLoading ? (
-  <p>Uploading...</p>
-) : imageUrl ? (
-  <img className="w-full h-full" src={imageUrl} alt="uploaded image" />
-) : (
-  <div className="flex flex-col items-center">
-    <img className="w-16 h-16 mb-3" src={Upload} alt="upload icon" />
-    <div className="text-center">
-      <p className="text-gray-300 text-lg">
-        <span className="font-bold text-primary-50 text-lg ">
-          Click to upload
-        </span>{" "}
-        or drag and drop
-      </p>
-      <p className="text-gray-300 text-lg">
-        SVG, PNG, JPG or GIF (max. 800x400px)
-      </p>
-    </div>
-  </div>
-)}
-</div> */
-}
