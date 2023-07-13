@@ -4,7 +4,7 @@ interface CloudinaryResponse {
   secure_url: string;
 }
 interface IError {
-  error: string | any;
+  error: string;
 }
 const useCloudinaryUpload = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -45,7 +45,10 @@ const useCloudinaryUpload = () => {
       setIsLoading(false);
     }
   }, []);
-
+  const removeImage = () => {
+    setImageUrl(null);
+    return;
+  };
   useEffect(() => {
     if (error) {
       console.error(error);
@@ -56,6 +59,7 @@ const useCloudinaryUpload = () => {
     isLoading,
     imageUrl,
     uploadImage,
+    removeImage,
     error,
   };
 };
