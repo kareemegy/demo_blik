@@ -1,12 +1,10 @@
 import { useEffect, useRef, useState } from "react";
-import Arrowicon from "../../assets/arrowDownIcon.svg";
-import AddIcon from "../../assets/add.png";
-import Delete from "../../assets/delete.svg";
-interface Item {
-  id: number;
-  name: string;
-  imageUrl: string;
-}
+import SelectedItems from "../SelectedItems";
+import DropDown from "../DropDown";
+import FilterItems from "../FilterItems";
+import AddSpeaker from "../AddSpeaker";
+import SearchInput from "../SearchInput";
+import Divider from "../Divider";
 
 interface Item {
   id: number;
@@ -92,7 +90,7 @@ const MultiselectInput = () => {
     setIsVisible(false);
   };
   useEffect(() => {
-    const handleClick = (event: MouseEvent) => {
+    const handleOutsideClick = (event: MouseEvent) => {
       if (
         absoluteDevContainerRef.current &&
         !absoluteDevContainerRef.current.contains(event.target as Node)
@@ -101,10 +99,10 @@ const MultiselectInput = () => {
         setSearchText("");
       }
     };
-    document.addEventListener("mousedown", handleClick);
+    document.addEventListener("mousedown", handleOutsideClick);
 
     return () => {
-      document.removeEventListener("mousedown", handleClick);
+      document.removeEventListener("mousedown", handleOutsideClick);
     };
   }, []);
 
@@ -118,10 +116,10 @@ const MultiselectInput = () => {
             className="absolute top-0 left-0 w-full px-5 text-white border border-gray-400"
           >
             <SearchInput query={searchText} onQueryChange={setSearchText} />
-            <hr className="my-3" />
+            <Divider space={3} />
             <div className="flex flex-col justify-between">
               <AddSpeaker />
-              <hr className="my-3" />
+              <Divider space={3} />
               <FilterItems
                 list={items}
                 onItemClick={handleSelect}
@@ -143,125 +141,3 @@ const MultiselectInput = () => {
 };
 
 export default MultiselectInput;
-interface SelectedItemsProps {
-  selectedItems: Item[];
-  className: string;
-  setSelectedItems: (items: Item[]) => void;
-  setItems: (items: Item[]) => void;
-  items: Item[];
-}
-const SelectedItems = ({
-  selectedItems,
-  className = "",
-  setSelectedItems,
-  setItems,
-  items,
-}: SelectedItemsProps) => {
-  const handleDelete = (itemToDelete: Item) => {
-    const updatedSelectedItems = selectedItems.filter(
-      (item) => item.id !== itemToDelete.id
-    );
-    setSelectedItems(updatedSelectedItems);
-    // Add the deleted item back to the list
-    const updatedAvailableItems = [...items, itemToDelete];
-    setItems(updatedAvailableItems);
-  };
-  return (
-    <div className={`flex flex-col ${className}`}>
-      {selectedItems.map((item) => (
-        <div className="flex items-center justify-between">
-          <div
-            key={item.id}
-            className="flex flex-1 items-center border border-gray-500 bg-gray-750  px-3 py-1 mr-5 my-1"
-          >
-            <img className="pr-2" src={item.imageUrl} alt="Avatar image" />
-            <p className="text-white">{item.name}</p>
-          </div>
-          <img
-            onClick={() => handleDelete(item)}
-            className="w-7 h-7 cursor-pointer"
-            src={Delete}
-            alt="delete icon"
-          />
-        </div>
-      ))}
-    </div>
-  );
-};
-interface DropDownProps {
-  onToggleVisibility: () => void;
-}
-const DropDown = ({ onToggleVisibility }: DropDownProps) => {
-  return (
-    <div className="relative" onClick={onToggleVisibility}>
-      <div className=" w-full appearance-none bg-transparent border border-gray-400 py-5 px-4 pr-8 ">
-        <p className="text-white">Lusail Stadium</p>
-      </div>
-
-      <div className="absolute pointer-events-none  inset-y-0 right-0 flex items-center px-2 text-white ">
-        <img src={Arrowicon} alt="arrow icon" />
-      </div>
-    </div>
-  );
-};
-
-interface FilterItemsProps {
-  list: Item[];
-  onItemClick: (item: Item) => void;
-  searchTerm: string;
-}
-const FilterItems = ({ list, onItemClick, searchTerm }: FilterItemsProps) => {
-  const filteredItems = list.filter((item) =>
-    item.name.toLowerCase().includes(searchTerm.toLowerCase())
-  );
-
-  return (
-    <div>
-      {filteredItems.length === 0 ? (
-        <p>No matching Users found.</p>
-      ) : (
-        <ul className="max-h-40 overflow-y-auto">
-          {filteredItems.map((item) => (
-            <li
-              key={item.id}
-              className="flex items-center my-2 cursor-pointer"
-              onClick={() => onItemClick(item)}
-            >
-              <img className="pr-5" src={item.imageUrl} alt="Avatar image" />
-              <p>{item.name}</p>
-            </li>
-          ))}
-        </ul>
-      )}
-    </div>
-  );
-};
-
-const AddSpeaker = () => {
-  return (
-    <div className="flex justify-between">
-      <p>Add new speaker</p>
-      <img className="w-4 h-4" src={AddIcon} alt="add icon" />
-    </div>
-  );
-};
-interface SerachInputProps {
-  query: string;
-  onQueryChange: (query: string) => void;
-}
-const SearchInput = ({ query, onQueryChange }: SerachInputProps) => {
-  const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
-    onQueryChange(event.target.value);
-  };
-  return (
-    <input
-      className="bg-transparent outline-none placeholder:text-white"
-      type="text"
-      name="search"
-      id="search"
-      placeholder="Search"
-      value={query}
-      onChange={handleSearch}
-    />
-  );
-};
