@@ -8,11 +8,7 @@ interface Item {
   imageUrl: string;
 }
 
-interface MultiselectProps {
-  items: Item[];
-  selectedItems: Item[];
-  onSelectedItemsChange: (items: Item[]) => void;
-}
+
 interface Item {
   id: number;
   name: string;
@@ -92,6 +88,7 @@ const MultiselectInput = () => {
   const handleSelect = (selectedItem: Item) => {
     setSelectedItems([...selectedItems, selectedItem]);
     setItems(items.filter((item) => item.id !== selectedItem.id));
+    setSearchText("");
     setIsVisible(false);
   };
 
@@ -118,8 +115,8 @@ const MultiselectInput = () => {
           className={`${isVisible ? dropDownHight : "pt-5"}`}
           selectedItems={selectedItems}
           setSelectedItems={setSelectedItems}
-          setItems={setItems}
           items={items}
+          setItems={setItems}
         />
       </div>
     </>
@@ -203,18 +200,24 @@ const FilterItems = ({ list, onItemClick, searchTerm }: FilterItemsProps) => {
   );
 
   return (
-    <ul className="max-h-40 overflow-y-auto ">
-      {filteredItems.map((item) => (
-        <li
-          key={item.id}
-          className="flex items-center my-2 cursor-pointer"
-          onClick={() => onItemClick(item)}
-        >
-          <img className="pr-5" src={item.imageUrl} alt="Avatar image" />
-          <p>{item.name}</p>
-        </li>
-      ))}
-    </ul>
+    <div>
+      {filteredItems.length === 0 ? (
+        <p>No matching Users found.</p>
+      ) : (
+        <ul className="max-h-40 overflow-y-auto">
+          {filteredItems.map((item) => (
+            <li
+              key={item.id}
+              className="flex items-center my-2 cursor-pointer"
+              onClick={() => onItemClick(item)}
+            >
+              <img className="pr-5" src={item.imageUrl} alt="Avatar image" />
+              <p>{item.name}</p>
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
   );
 };
 
