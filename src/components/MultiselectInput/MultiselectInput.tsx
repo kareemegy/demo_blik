@@ -7,7 +7,6 @@ interface Item {
   name: string;
   imageUrl: string;
 }
-// type SelectHandler = (item: Item | null) => void;
 
 interface MultiselectProps {
   items: Item[];
@@ -86,10 +85,6 @@ const MultiselectInput = () => {
   const [isVisible, setIsVisible] = useState(false);
   const [searchText, setSearchText] = useState("");
 
-  const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchText(event.target.value);
-  };
-
   const toggleVisibility = () => {
     setIsVisible(!isVisible);
   };
@@ -104,22 +99,10 @@ const MultiselectInput = () => {
       {!isVisible && <DropDown onToggleVisibility={toggleVisibility} />}
       {isVisible && (
         <div className="absolute top-0 left-0 w-full  px-5 text-white border border-gray-400">
-          <input
-            className="bg-transparent outline-none placeholder:text-white"
-            type="text"
-            name="search"
-            id="search"
-            placeholder="Search"
-            value={searchText}
-            onChange={handleSearch}
-          />
+          <SearchInput query={searchText} onQueryChange={setSearchText} />
           <hr className="my-3" />
           <div className="flex flex-col justify-between">
-            <div className="flex justify-between">
-              <p>Add new speaker</p>
-              <img className="w-4 h-4" src={AddIcon} alt="add icon" />
-            </div>
-
+            <AddSpeaker />
             <hr className="my-3" />
             <FilterItems
               list={items}
@@ -197,5 +180,34 @@ const SelectedItems = ({ selectedItems }: SelectedItemsProps) => {
         </div>
       ))}
     </div>
+  );
+};
+
+const AddSpeaker = () => {
+  return (
+    <div className="flex justify-between">
+      <p>Add new speaker</p>
+      <img className="w-4 h-4" src={AddIcon} alt="add icon" />
+    </div>
+  );
+};
+interface SerachInputProps {
+  query: string;
+  onQueryChange: (query: string) => void;
+}
+const SearchInput = ({ query, onQueryChange }: SerachInputProps) => {
+  const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
+    onQueryChange(event.target.value);
+  };
+  return (
+    <input
+      className="bg-transparent outline-none placeholder:text-white"
+      type="text"
+      name="search"
+      id="search"
+      placeholder="Search"
+      value={query}
+      onChange={handleSearch}
+    />
   );
 };
