@@ -89,8 +89,9 @@ const MultiselectInput = () => {
     setIsVisible(!isVisible);
   };
 
-  const handleSelect = (item: Item) => {
-    setSelectedItems([...selectedItems, item]);
+  const handleSelect = (selectedItem: Item) => {
+    setSelectedItems([...selectedItems, selectedItem]);
+    setItems(items.filter((item) => item.id !== selectedItem.id));
     setIsVisible(false);
   };
 
@@ -116,6 +117,9 @@ const MultiselectInput = () => {
         <SelectedItems
           className={`${isVisible ? dropDownHight : "pt-5"}`}
           selectedItems={selectedItems}
+          setSelectedItems={setSelectedItems}
+          setItems={setItems}
+          items={items}
         />
       </div>
     </>
@@ -126,11 +130,26 @@ export default MultiselectInput;
 interface SelectedItemsProps {
   selectedItems: Item[];
   className: string;
+  setSelectedItems: (items: Item[]) => void;
+  setItems: (items: Item[]) => void;
+  items: Item[];
 }
 const SelectedItems = ({
   selectedItems,
   className = "",
+  setSelectedItems,
+  setItems,
+  items,
 }: SelectedItemsProps) => {
+  const handleDelete = (itemToDelete: Item) => {
+    const updatedSelectedItems = selectedItems.filter(
+      (item) => item.id !== itemToDelete.id
+    );
+    setSelectedItems(updatedSelectedItems);
+    // Add the deleted item back to the list
+    const updatedAvailableItems = [...items, itemToDelete];
+    setItems(updatedAvailableItems);
+  };
   return (
     <div className={`flex flex-col ${className}`}>
       {selectedItems.map((item) => (
@@ -142,7 +161,12 @@ const SelectedItems = ({
             <img className="pr-2" src={item.imageUrl} alt="Avatar image" />
             <p className="text-white">{item.name}</p>
           </div>
-          <img className=" w-7 h-7" src={Delete} alt="delete icon" />
+          <img
+            onClick={() => handleDelete(item)}
+            className="w-7 h-7 cursor-pointer"
+            src={Delete}
+            alt="delete icon"
+          />
         </div>
       ))}
     </div>
@@ -179,7 +203,7 @@ const FilterItems = ({ list, onItemClick, searchTerm }: FilterItemsProps) => {
   );
 
   return (
-    <ul className="max-h-40 overflow-y-auto">
+    <ul className="max-h-40 overflow-y-auto ">
       {filteredItems.map((item) => (
         <li
           key={item.id}
