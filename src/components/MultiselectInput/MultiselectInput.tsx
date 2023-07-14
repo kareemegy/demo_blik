@@ -1,7 +1,7 @@
 import { useState } from "react";
 import Arrowicon from "../../assets/arrowDownIcon.svg";
 import AddIcon from "../../assets/add.png";
-
+import Delete from "../../assets/delete.svg";
 interface Item {
   id: number;
   name: string;
@@ -84,7 +84,7 @@ const MultiselectInput = () => {
   const [selectedItems, setSelectedItems] = useState<Item[]>([]);
   const [isVisible, setIsVisible] = useState(false);
   const [searchText, setSearchText] = useState("");
-
+  const dropDownHight = "pt-[300px]";
   const toggleVisibility = () => {
     setIsVisible(!isVisible);
   };
@@ -95,38 +95,68 @@ const MultiselectInput = () => {
   };
 
   return (
-    <div className="relative mt-10">
-      {!isVisible && <DropDown onToggleVisibility={toggleVisibility} />}
-      {isVisible && (
-        <div className="absolute top-0 left-0 w-full  px-5 text-white border border-gray-400">
-          <SearchInput query={searchText} onQueryChange={setSearchText} />
-          <hr className="my-3" />
-          <div className="flex flex-col justify-between">
-            <AddSpeaker />
+    <>
+      <div className="relative mt-10">
+        {!isVisible && <DropDown onToggleVisibility={toggleVisibility} />}
+        {isVisible && (
+          <div className="absolute top-0 left-0 w-full px-5 text-white border border-gray-400">
+            <SearchInput query={searchText} onQueryChange={setSearchText} />
             <hr className="my-3" />
-            <FilterItems
-              list={items}
-              onItemClick={handleSelect}
-              searchTerm={searchText}
-            />
+            <div className="flex flex-col justify-between">
+              <AddSpeaker />
+              <hr className="my-3" />
+              <FilterItems
+                list={items}
+                onItemClick={handleSelect}
+                searchTerm={searchText}
+              />
+            </div>
           </div>
-        </div>
-      )}
-      <SelectedItems selectedItems={selectedItems} />
-    </div>
+        )}
+        <SelectedItems
+          className={`${isVisible ? dropDownHight : "pt-5"}`}
+          selectedItems={selectedItems}
+        />
+      </div>
+    </>
   );
 };
 
 export default MultiselectInput;
+interface SelectedItemsProps {
+  selectedItems: Item[];
+  className: string;
+}
+const SelectedItems = ({
+  selectedItems,
+  className = "",
+}: SelectedItemsProps) => {
+  return (
+    <div className={`flex flex-col ${className}`}>
+      {selectedItems.map((item) => (
+        <div className="flex items-center justify-between">
+          <div
+            key={item.id}
+            className="flex flex-1 items-center border border-gray-500 bg-gray-750  px-3 py-1 mr-5 my-1"
+          >
+            <img className="pr-2" src={item.imageUrl} alt="Avatar image" />
+            <p className="text-white">{item.name}</p>
+          </div>
+          <img className=" w-7 h-7" src={Delete} alt="delete icon" />
+        </div>
+      ))}
+    </div>
+  );
+};
 interface DropDownProps {
   onToggleVisibility: () => void;
 }
 const DropDown = ({ onToggleVisibility }: DropDownProps) => {
   return (
-    <div>
+    <div className="relative">
       <div
         onClick={onToggleVisibility}
-        className="w-full appearance-none bg-transparent border border-gray-400 py-5 px-4 pr-8 "
+        className=" w-full appearance-none bg-transparent border border-gray-400 py-5 px-4 pr-8 "
       >
         <p className="text-white">Lusail Stadium</p>
       </div>
@@ -161,25 +191,6 @@ const FilterItems = ({ list, onItemClick, searchTerm }: FilterItemsProps) => {
         </li>
       ))}
     </ul>
-  );
-};
-
-interface SelectedItemsProps {
-  selectedItems: Item[];
-}
-const SelectedItems = ({ selectedItems }: SelectedItemsProps) => {
-  return (
-    <div className="flex flex-wrap">
-      {selectedItems.map((item) => (
-        <div
-          key={item.id}
-          className="flex items-center bg-gray-400 rounded-full px-3 py-1 mx-1 my-1"
-        >
-          <img className="pr-2" src={item.imageUrl} alt="Avatar image" />
-          <p>{item.name}</p>
-        </div>
-      ))}
-    </div>
   );
 };
 
