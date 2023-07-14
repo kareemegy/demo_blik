@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Arrowicon from "../../assets/arrowDownIcon.svg";
 import AddIcon from "../../assets/add.png";
 import Delete from "../../assets/delete.svg";
@@ -7,7 +7,6 @@ interface Item {
   name: string;
   imageUrl: string;
 }
-
 
 interface Item {
   id: number;
@@ -80,6 +79,7 @@ const MultiselectInput = () => {
   const [selectedItems, setSelectedItems] = useState<Item[]>([]);
   const [isVisible, setIsVisible] = useState(false);
   const [searchText, setSearchText] = useState("");
+  const absoluteDevContainerRef = useRef<HTMLDivElement>(null);
   const dropDownHight = "pt-[300px]";
   const toggleVisibility = () => {
     setIsVisible(!isVisible);
@@ -91,13 +91,32 @@ const MultiselectInput = () => {
     setSearchText("");
     setIsVisible(false);
   };
+  useEffect(() => {
+    const handleClick = (event: MouseEvent) => {
+      if (
+        absoluteDevContainerRef.current &&
+        !absoluteDevContainerRef.current.contains(event.target as Node)
+      ) {
+        setIsVisible(false);
+        setSearchText("");
+      }
+    };
+    document.addEventListener("mousedown", handleClick);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClick);
+    };
+  }, []);
 
   return (
     <>
       <div className="relative mt-10">
         {!isVisible && <DropDown onToggleVisibility={toggleVisibility} />}
         {isVisible && (
-          <div className="absolute top-0 left-0 w-full px-5 text-white border border-gray-400">
+          <div
+            ref={absoluteDevContainerRef}
+            className="absolute top-0 left-0 w-full px-5 text-white border border-gray-400"
+          >
             <SearchInput query={searchText} onQueryChange={setSearchText} />
             <hr className="my-3" />
             <div className="flex flex-col justify-between">
@@ -174,11 +193,8 @@ interface DropDownProps {
 }
 const DropDown = ({ onToggleVisibility }: DropDownProps) => {
   return (
-    <div className="relative">
-      <div
-        onClick={onToggleVisibility}
-        className=" w-full appearance-none bg-transparent border border-gray-400 py-5 px-4 pr-8 "
-      >
+    <div className="relative" onClick={onToggleVisibility}>
+      <div className=" w-full appearance-none bg-transparent border border-gray-400 py-5 px-4 pr-8 ">
         <p className="text-white">Lusail Stadium</p>
       </div>
 
