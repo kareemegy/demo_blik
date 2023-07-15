@@ -1,4 +1,5 @@
-import Delete from "../../assets/delete.svg";
+import RenderItems from "../RenderItems";
+
 interface Item {
   id: number;
   name: string;
@@ -29,25 +30,11 @@ const SelectedItems = ({
     setItems(updatedAvailableItems);
   };
   return (
-    <div className={`flex flex-col ${className}`}>
-      {selectedItems.map((item) => (
-        <div className="flex items-center justify-between">
-          <div
-            key={item.id}
-            className="flex flex-1 items-center border border-gray-500 bg-gray-750  px-3 py-1 mr-5 my-1"
-          >
-            <img className="pr-2" src={item.imageUrl} alt="Avatar image" />
-            <p className="text-white">{item.name}</p>
-          </div>
-          <img
-            onClick={() => handleDelete(item)}
-            className="w-7 h-7 cursor-pointer"
-            src={Delete}
-            alt="delete icon"
-          />
-        </div>
-      ))}
-    </div>
+    <RenderItems
+      items={selectedItems}
+      onDeleteItem={handleDelete}
+      className={className}
+    />
   );
 };
 export default SelectedItems;

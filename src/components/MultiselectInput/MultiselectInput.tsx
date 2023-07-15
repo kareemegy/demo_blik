@@ -110,8 +110,8 @@ const MultiselectInput = () => {
   return (
     <>
       <div className="relative mt-10">
-        {/* {!isVisible && <DropDown onToggleVisibility={toggleVisibility} />} */}
-        {/* {isVisible && (
+        {!isVisible && <DropDown onToggleVisibility={toggleVisibility} />}
+        {isVisible && (
           <div
             ref={absoluteDevContainerRef}
             className="absolute top-0 left-0 w-full px-5 text-white border border-gray-400"
@@ -128,14 +128,14 @@ const MultiselectInput = () => {
               />
             </div>
           </div>
-        )} */}
-        {/* <SelectedItems
+        )}
+        <SelectedItems
           className={`${isVisible ? dropDownHight : "pt-5"}`}
           selectedItems={selectedItems}
           setSelectedItems={setSelectedItems}
           items={items}
           setItems={setItems}
-        /> */}
+        />
       </div>
       <Test />
     </>
