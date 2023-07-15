@@ -29,9 +29,14 @@ const useLoadMore = (
   const isInitializedRef = useRef<boolean>(false);
 
   const fetchMore = useCallback(async () => {
+    if (isLoadingRef.current) return;
     isLoadingRef.current = true;
+
     try {
       const newData = await fetchData(offset, limit);
+      if (newData.length === 0) {
+        return;
+      }
       setData((prevData) => [...prevData, ...newData]);
       setOffset((prevOffset: number) => prevOffset + limit);
     } catch (error) {
@@ -57,10 +62,15 @@ const useLoadMore = (
 
   useEffect(() => {
     const handleObserver = async (entries: IntersectionObserverEntry[]) => {
-      if (entries[0].isIntersecting && !isLoadingRef.current) {
+      if (
+        entries[0].isIntersecting &&
+        !isLoadingRef.current &&
+        data.length > 0
+      ) {
         await fetchMore();
       }
     };
+
     const handleIntersection: IntersectionObserverCallback = (entries) => {
       void handleObserver(entries);
     };
@@ -76,7 +86,7 @@ const useLoadMore = (
     }
 
     return () => observer.disconnect();
-  }, [fetchMore, lastItemRef]);
+  }, [fetchMore, lastItemRef, data.length]);
 
   return { data, isLoading: isLoadingRef.current, lastItemRef };
 };
