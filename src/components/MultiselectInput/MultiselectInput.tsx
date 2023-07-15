@@ -6,6 +6,7 @@ import AddSpeaker from "../AddSpeaker";
 import SearchInput from "../SearchInput";
 import Divider from "../Divider";
 import useLoadMore from "../../hooks/useLoadMore";
+import ModalContainer from "../ModalContainer/ModalContainer";
 
 interface Item {
   id: number;
@@ -107,6 +108,7 @@ const MultiselectInput = () => {
     setIsVisible(false);
   };
 
+
   return (
     <>
       <div className="relative mt-10">
@@ -137,35 +139,37 @@ const MultiselectInput = () => {
           setItems={setItems}
         />
       </div>
-      <Test />
     </>
   );
 };
 
 export default MultiselectInput;
-const Test = () => {
-  const fetchUsers = async (offset: number, limit: number) => {
-    const response = await fetch("/data.json");
-    const data = (await response.json()) as Item[];
-    const startIndex = offset;
-    const endIndex = offset + limit;
-    const slicedData = data.slice(startIndex, endIndex);
-    console.log(slicedData);
-    return slicedData;
-  };
-  const { data, isLoading, lastItemRef } = useLoadMore(fetchUsers);
 
-  return (
-    <div>
-      <ul className="max-h-40 overflow-y-auto">
-        {data.map(({ id, name, imageUrl }, index) => (
-          <li key={id} ref={index === data.length - 1 ? lastItemRef : null}>
-            <img src={imageUrl} alt={name} />
-            <p>{name}</p>
-          </li>
-        ))}
-      </ul>
-      {isLoading && <p>Loading...</p>}
-    </div>
-  );
-};
+// const Test = () => {
+//   const fetchUsers = async (offset: number, limit: number) => {
+//     const response = await fetch("/data.json");
+//     const data = (await response.json()) as Item[];
+//     const startIndex = offset;
+//     const endIndex = offset + limit;
+//     const slicedData = data.slice(startIndex, endIndex);
+//     console.log(slicedData);
+//     return slicedData;
+//   };
+//   const { data, isLoading, lastItemRef } = useLoadMore(fetchUsers);
+
+//   return (
+//     <div>
+//       <ul className="max-h-40 overflow-y-auto">
+//         {data.map(({ id, name, imageUrl }, index) => (
+//           <li key={id} ref={index === data.length - 1 ? lastItemRef : null}>
+//             <img src={imageUrl} alt={name} />
+//             <p>{name}</p>
+//           </li>
+//         ))}
+//       </ul>
+//       {isLoading && <p>Loading...</p>}
+//     </div>
+//   );
+// };
+
+

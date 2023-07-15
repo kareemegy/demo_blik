@@ -1,11 +1,20 @@
-import AddIcon from "../../assets/add.png";
+import { useState } from "react";
+import ModalContainer from "../ModalContainer/ModalContainer";
+import AddSpeakerButton from "../AddSpeakerButton/AddSpeakerButton";
 
 const AddSpeaker = () => {
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const toggleModal = () => {
+    setIsModalVisible(!isModalVisible);
+  };
   return (
-    <div className="flex justify-between cursor-pointer">
-      <p>Add new speaker</p>
-      <img className="w-4 h-4" src={AddIcon} alt="add icon" />
-    </div>
+    <>
+      <AddSpeakerButton toggleModal={toggleModal} />
+      <ModalContainer
+        isModalVisible={isModalVisible}
+        toggleModal={toggleModal}
+      />
+    </>
   );
 };
 export default AddSpeaker;

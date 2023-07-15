@@ -4,6 +4,7 @@ export default {
     extend: {
       colors: {
         "primary-50": "#FFFFFF",
+        "primary-600": "#404040",
         "primary-800": "#1E1E1E",
         "gray-200": "#BABABA",
         "gray-300": "#989898",
