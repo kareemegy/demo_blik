@@ -1,8 +1,8 @@
 const TextArea = () => {
     return (
-      <div className="mt-10">
+      <div>
         <textarea
-          className="w-full h-40 bg-transparent border border-gray-400 p-3"
+          className="w-full mb-10 h-40 bg-transparent border border-gray-400 p-3"
           placeholder="Start Typing..."
         ></textarea>
       </div>

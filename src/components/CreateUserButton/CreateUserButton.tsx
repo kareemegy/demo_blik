@@ -1,15 +1,16 @@
 import AddIcon from "../../assets/add.png";
 
-interface AddSpeakerButtonProps {
+interface CreateUserButton {
   toggleModal: () => void;
+  userType: string;
 }
-const AddSpeakerButton = ({ toggleModal }: AddSpeakerButtonProps) => {
+const CreateUserButton = ({ toggleModal, userType }: CreateUserButton) => {
   return (
     <div onClick={toggleModal} className="flex justify-between cursor-pointer">
-      <p>Add new speaker</p>
+      <p>Add new {userType}</p>
       <img className="w-4 h-4" src={AddIcon} alt="add icon" />
     </div>
   );
 };
 
-export default AddSpeakerButton;
+export default CreateUserButton;

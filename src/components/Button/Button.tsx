@@ -8,7 +8,7 @@ const Button = ({ title, style, onClick }: ButtonProps) => {
     <button
       onClick={onClick}
       className={`${
-        style == "white" ? "bg-white text-black" : "bg-black text-white"
+        style == "white" ? "bg-white text-black" : "bg-black text-white border border-gray-700"
       } w-full py-3 px-6 font-bold`}
     >
       {title}

@@ -1,15 +1,17 @@
 import { useState } from "react";
-import ModalContainer from "../ModalContainer/ModalContainer";
-import AddSpeakerButton from "../AddSpeakerButton/AddSpeakerButton";
-
-const AddSpeaker = () => {
+import ModalContainer from "../ModalContainer";
+import CreateUserButton from "../CreateUserButton";
+interface Props {
+  userType: string;
+}
+const CreateUser = ({ userType }: Props) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const toggleModal = () => {
     setIsModalVisible(!isModalVisible);
   };
   return (
     <>
-      <AddSpeakerButton toggleModal={toggleModal} />
+      <CreateUserButton userType={userType} toggleModal={toggleModal} />
       <ModalContainer
         isModalVisible={isModalVisible}
         toggleModal={toggleModal}
@@ -17,4 +19,4 @@ const AddSpeaker = () => {
     </>
   );
 };
-export default AddSpeaker;
+export default CreateUser;

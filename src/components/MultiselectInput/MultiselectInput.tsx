@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import SelectedItems from "../SelectedItems";
 import DropDown from "../DropDown";
 import FilterItems from "../FilterItems";
-import AddSpeaker from "../AddSpeaker";
+import CreateUser from "../CreateUser";
 import SearchInput from "../SearchInput";
 import Divider from "../Divider";
 import useLoadMore from "../../hooks/useLoadMore";
@@ -11,7 +11,10 @@ interface Item {
   name: string;
   imageUrl: string;
 }
-const MultiselectInput = () => {
+interface Props {
+  userType: string;
+}
+const MultiselectInput = ({ userType }: Props) => {
   const [items, setItems] = useState<Item[]>([
     {
       id: 1,
@@ -111,7 +114,7 @@ const MultiselectInput = () => {
 
   return (
     <>
-      <div className="relative mt-10">
+      <div className="relative mb-10">
         {!isVisible && <DropDown onToggleVisibility={toggleVisibility} />}
         {isVisible && (
           <div
@@ -121,7 +124,7 @@ const MultiselectInput = () => {
             <SearchInput query={searchText} onQueryChange={setSearchText} />
             <Divider space={3} />
             <div className="flex flex-col justify-between">
-              <AddSpeaker />
+              <CreateUser userType={userType} />
               <Divider space={3} />
               <FilterItems
                 list={items}
