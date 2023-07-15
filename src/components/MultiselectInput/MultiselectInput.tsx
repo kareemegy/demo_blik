@@ -5,6 +5,7 @@ import FilterItems from "../FilterItems";
 import AddSpeaker from "../AddSpeaker";
 import SearchInput from "../SearchInput";
 import Divider from "../Divider";
+import useLoadMore from "../../hooks/useLoadMore";
 
 interface Item {
   id: number;
@@ -79,16 +80,6 @@ const MultiselectInput = () => {
   const [searchText, setSearchText] = useState("");
   const absoluteDevContainerRef = useRef<HTMLDivElement>(null);
   const dropDownHight = "pt-[300px]";
-  const toggleVisibility = () => {
-    setIsVisible(!isVisible);
-  };
-
-  const handleSelect = (selectedItem: Item) => {
-    setSelectedItems([...selectedItems, selectedItem]);
-    setItems(items.filter((item) => item.id !== selectedItem.id));
-    setSearchText("");
-    setIsVisible(false);
-  };
   useEffect(() => {
     const handleOutsideClick = (event: MouseEvent) => {
       if (
@@ -105,12 +96,22 @@ const MultiselectInput = () => {
       document.removeEventListener("mousedown", handleOutsideClick);
     };
   }, []);
+  const toggleVisibility = () => {
+    setIsVisible(!isVisible);
+  };
+
+  const handleSelect = (selectedItem: Item) => {
+    setSelectedItems([...selectedItems, selectedItem]);
+    setItems(items.filter((item) => item.id !== selectedItem.id));
+    setSearchText("");
+    setIsVisible(false);
+  };
 
   return (
     <>
       <div className="relative mt-10">
-        {!isVisible && <DropDown onToggleVisibility={toggleVisibility} />}
-        {isVisible && (
+        {/* {!isVisible && <DropDown onToggleVisibility={toggleVisibility} />} */}
+        {/* {isVisible && (
           <div
             ref={absoluteDevContainerRef}
             className="absolute top-0 left-0 w-full px-5 text-white border border-gray-400"
@@ -127,17 +128,44 @@ const MultiselectInput = () => {
               />
             </div>
           </div>
-        )}
-        <SelectedItems
+        )} */}
+        {/* <SelectedItems
           className={`${isVisible ? dropDownHight : "pt-5"}`}
           selectedItems={selectedItems}
           setSelectedItems={setSelectedItems}
           items={items}
           setItems={setItems}
-        />
+        /> */}
       </div>
+      <Test />
     </>
   );
 };
 
 export default MultiselectInput;
+const Test = () => {
+  const fetchUsers = async (offset: number, limit: number) => {
+    const response = await fetch("/data.json");
+    const data = (await response.json()) as Item[];
+    const startIndex = offset;
+    const endIndex = offset + limit;
+    const slicedData = data.slice(startIndex, endIndex);
+    console.log(slicedData);
+    return slicedData;
+  };
+  const { data, isLoading, lastItemRef } = useLoadMore(fetchUsers);
+
+  return (
+    <div>
+      <ul className="max-h-40 overflow-y-auto">
+        {data.map(({ id, name, imageUrl }, index) => (
+          <li key={id} ref={index === data.length - 1 ? lastItemRef : null}>
+            <img src={imageUrl} alt={name} />
+            <p>{name}</p>
+          </li>
+        ))}
+      </ul>
+      {isLoading && <p>Loading...</p>}
+    </div>
+  );
+};
