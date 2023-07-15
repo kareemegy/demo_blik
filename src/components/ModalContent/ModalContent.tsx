@@ -1,11 +1,10 @@
-import UploadPlaceHolder from "../../assets/UploadPlaceHolder.svg";
 import Button from "../Button";
 import InputField from "../InputField";
 import Label from "../Label";
+import ProfileUpload from "../ProfileUpload/ProfileUpload";
 interface ModalContentProps {
   toggleModal: () => void;
 }
-
 const ModalContent = ({ toggleModal }: ModalContentProps) => {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center ">
@@ -18,9 +17,7 @@ const ModalContent = ({ toggleModal }: ModalContentProps) => {
           <div>
             <h1 className="text-white">Photo</h1>
           </div>
-          <div className="flex justify-center">
-            <img src={UploadPlaceHolder} alt="upload image" />
-          </div>
+          <ProfileUpload />
         </div>
         <div>
           <Label label="First Name" />

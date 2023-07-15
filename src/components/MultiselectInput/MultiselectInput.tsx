@@ -6,8 +6,6 @@ import AddSpeaker from "../AddSpeaker";
 import SearchInput from "../SearchInput";
 import Divider from "../Divider";
 import useLoadMore from "../../hooks/useLoadMore";
-import ModalContainer from "../ModalContainer/ModalContainer";
-
 interface Item {
   id: number;
   name: string;
@@ -85,7 +83,10 @@ const MultiselectInput = () => {
     const handleOutsideClick = (event: MouseEvent) => {
       if (
         absoluteDevContainerRef.current &&
-        !absoluteDevContainerRef.current.contains(event.target as Node)
+        !absoluteDevContainerRef.current.contains(event.target as Node) &&
+        !document
+          .querySelector(".modal-container")
+          ?.contains(event.target as Node)
       ) {
         setIsVisible(false);
         setSearchText("");
@@ -107,7 +108,6 @@ const MultiselectInput = () => {
     setSearchText("");
     setIsVisible(false);
   };
-
 
   return (
     <>
@@ -171,5 +171,3 @@ export default MultiselectInput;
 //     </div>
 //   );
 // };
-
-
