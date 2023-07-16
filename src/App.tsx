@@ -41,8 +41,6 @@ const NewSessionsForm = () => {
         <MultiselectInput userType="speaker" />
         <Label label="Moderator" />
         <MultiselectInput userType="Moderator" />
-        <Label label="Venue " />
-        <SelectInput />
       </div>
     </div>
   );
