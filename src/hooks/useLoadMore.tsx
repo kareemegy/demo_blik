@@ -1,15 +1,17 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 
 interface Item {
-  id: number;
-  name: string;
-  imageUrl: string;
+  id: number;                 
+  first_name: string;                 
+  last_name: string;                  
+  avatar: string;                 
 }
 
 interface LoadMoreResponse {
   data: Item[];
   isLoading: boolean;
   lastItemRef: React.MutableRefObject<HTMLLIElement | null>;
+  setIsSearching: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 interface LoadMoreOptions {
@@ -27,8 +29,12 @@ const useLoadMore = (
   const lastItemRef = useRef<HTMLLIElement>(null);
   const isLoadingRef = useRef<boolean>(false);
   const isInitializedRef = useRef<boolean>(false);
+  const [isSearching, setIsSearching] = useState(false);
 
   const fetchMore = useCallback(async () => {
+    console.log(offset, limit);
+
+    if (isSearching) return;
     if (isLoadingRef.current) return;
     isLoadingRef.current = true;
 
@@ -37,14 +43,22 @@ const useLoadMore = (
       if (newData.length === 0) {
         return;
       }
-      setData((prevData) => [...prevData, ...newData]);
+      setData((prevData) => {
+        const filteredData = newData.filter((item) => {
+          const index = prevData.findIndex(
+            (prevItem) => prevItem.id === item.id
+          );
+          return index === -1;
+        });
+        return [...prevData, ...filteredData];
+      });
       setOffset((prevOffset: number) => prevOffset + limit);
     } catch (error) {
       console.error(error);
     } finally {
       isLoadingRef.current = false;
     }
-  }, [fetchData, limit, offset]);
+  }, [fetchData, limit, offset, isSearching]);
 
   useEffect(() => {
     if (!isInitializedRef.current) {
@@ -57,11 +71,14 @@ const useLoadMore = (
         await fetchMore();
       }
     };
+
     fetchData().catch((error) => console.error(error));
   }, [fetchMore, offset]);
 
   useEffect(() => {
     const handleObserver = async (entries: IntersectionObserverEntry[]) => {
+      if (isSearching) return;
+
       if (
         entries[0].isIntersecting &&
         !isLoadingRef.current &&
@@ -86,8 +103,13 @@ const useLoadMore = (
     }
 
     return () => observer.disconnect();
-  }, [fetchMore, lastItemRef, data.length]);
+  }, [fetchMore, lastItemRef, data.length, isSearching]);
 
-  return { data, isLoading: isLoadingRef.current, lastItemRef };
+  return {
+    data,
+    isLoading: isLoadingRef.current,
+    lastItemRef,
+    setIsSearching,
+  };
 };
 export default useLoadMore;

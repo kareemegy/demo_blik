@@ -1,16 +1,24 @@
+import avatrPlaceholder from "../../assets/avatar.png";
 interface Item {
   id: number;
-  name: string;
-  imageUrl: string;
+  first_name: string;
+  last_name: string;
+  avatar: string;
 }
 interface FilterItemsProps {
   list: Item[];
   onItemClick: (item: Item) => void;
   searchTerm: string;
+  lastItemRef: (node: HTMLLIElement) => void;
 }
-const FilterItems = ({ list, onItemClick, searchTerm }: FilterItemsProps) => {
+const FilterItems = ({
+  list,
+  onItemClick,
+  searchTerm,
+  lastItemRef,
+}: FilterItemsProps) => {
   const filteredItems = list.filter((item) =>
-    item.name.toLowerCase().includes(searchTerm.toLowerCase())
+    item.first_name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   return (
@@ -19,14 +27,23 @@ const FilterItems = ({ list, onItemClick, searchTerm }: FilterItemsProps) => {
         <p>No matching Users found.</p>
       ) : (
         <ul className="max-h-40 overflow-y-auto">
-          {filteredItems.map((item) => (
+          {filteredItems.map((item, index) => (
             <li
+              ref={index === filteredItems.length - 1 ? lastItemRef : null}
               key={item.id}
               className="flex items-center my-2 cursor-pointer"
               onClick={() => onItemClick(item)}
             >
-              <img className="pr-5" src={item.imageUrl} alt="Avatar image" />
-              <p>{item.name}</p>
+              {item.avatar ? (
+                <img
+                  className="w-8 h-8 rounded-full"
+                  src={item.avatar}
+                  alt={item.first_name}
+                />
+              ) : (
+                <img src={avatrPlaceholder} alt={item.first_name} />
+              )}
+              <p className="ml-5">{item.first_name}</p>
             </li>
           ))}
         </ul>

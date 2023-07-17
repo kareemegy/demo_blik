@@ -4,10 +4,12 @@ import ModalContent from "../ModalContent";
 interface ModalContainerProps {
   isModalVisible: boolean;
   toggleModal: () => void;
+  userType: string;
 }
 const ModalContainer = ({
   isModalVisible,
   toggleModal,
+  userType,
 }: ModalContainerProps) => {
   const modalContainer = document.querySelector(".modal-container");
   useEffect(() => {
@@ -24,7 +26,7 @@ const ModalContainer = ({
     <>
       {modalContainer && isModalVisible
         ? createPortal(
-            <ModalContent toggleModal={toggleModal} />,
+            <ModalContent userType={userType} toggleModal={toggleModal} />,
             modalContainer
           )
         : null}

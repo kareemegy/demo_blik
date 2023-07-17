@@ -7,7 +7,7 @@ interface ProfileUploadProps {
   onChange: (imageUrl: string | undefined) => void;
 }
 const ProfileUpload = ({ onChange }: ProfileUploadProps) => {
-  const { uploadImage, imageUrl, isLoading, error } = useCloudinaryUpload();
+  const { uploadImage, imageUrl, removeImage, isLoading, error } = useCloudinaryUpload();
 
   useEffect(() => {
     if (imageUrl) {

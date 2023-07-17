@@ -1,53 +1,66 @@
-import { useState, useEffect } from "react";
-interface IFetchResponse {
-  data: string | number | object;
+import { useState } from "react";
+
+interface User {
+  id: number;
+  first_name: string;
+  last_name: string;
+  avatar: string;
 }
-// type FormDataOrObject = FormData | { [key: string]: string };
-const useAuthenticatedFetch = (url: string, method: string, data?: object) => {
+interface IFetchResponse {
+  users: User[];
+}
+interface RequestOptions {
+  headers: {
+    "content-type": string;
+    Authorization: string;
+  };
+  method: string;
+  body?: string;
+}
+
+const useAuthenticatedFetch = () => {
   const [resData, setResData] = useState<IFetchResponse | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<Error | null>(null);
 
-  useEffect(() => {
+  const fetchData = async (url: string, method: string, data?: object) => {
+    setIsLoading(true);
     setResData(null);
+    setError(null);
+
     const BASEURL = import.meta.env.VITE_BASE_URL as string;
     const token = import.meta.env.VITE_BEARER_TOKEN as string;
     const API_URL = `${BASEURL}${url}`;
 
-    const fetchData = async () => {
-      setIsLoading(true);
-      try {
-        const requestOptions = {
-          headers: {
-            Accept: "application/json",
-            "content-type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          method: method,
-          body: JSON.stringify(data),
-        };
+    try {
+      const requestOptions: RequestOptions = {
+        headers: {
+          "content-type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        method: method,
+      };
 
-        const response = await fetch(API_URL, requestOptions);
-        const json = (await response.json()) as IFetchResponse;
-
-        setResData(json);
-        console.log(json);
-      } catch (error) {
-        console.log(error as Error);
-      } finally {
-        setIsLoading(false);
+      if (method === "GET") {
+        delete requestOptions.body;
+      } else {
+        requestOptions.body = JSON.stringify(data);
       }
-      return;
-    };
 
-    if (data) {
-      fetchData().catch((error) => {
-        console.error(error);
-      });
+      const response = await fetch(API_URL, requestOptions);
+      const json = (await response.json()) as IFetchResponse;
+      setResData(json);
+      return resData;
+    } catch (error) {
+      setError(error as Error);
+    } finally {
+      setIsLoading(false);
     }
-  }, [url, data, method]);
+  };
+  const postData = async (url: string, data: object) => {
+    await fetchData(url, "POST", data);
+  };
 
-  return { resData, isLoading, error };
+  return { resData, isLoading, error, fetchData, postData };
 };
-
 export default useAuthenticatedFetch;

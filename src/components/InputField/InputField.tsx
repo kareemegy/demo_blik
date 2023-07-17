@@ -4,7 +4,7 @@ interface InputFieldProps {
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   type?: string;
 }
-const InputField = ({ placeholder, value, onChange,type="string" }: InputFieldProps) => {
+const InputField = ({ placeholder, value, onChange, type="string" }: InputFieldProps) => {
   return (
     <div className="mb-10">
       <input

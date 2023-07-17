@@ -7,9 +7,13 @@ import useAuthenticatedFetch from "../../hooks/useAuthenticatedFetch";
 
 interface ModalContentProps {
   toggleModal: () => void;
+  userType: string;
 }
 
-const ModalContent: React.FC<ModalContentProps> = ({ toggleModal }) => {
+const ModalContent: React.FC<ModalContentProps> = ({
+  toggleModal,
+  userType,
+}) => {
   const [firstName, setFirstName] = useState<string>("");
   const [lastName, setLastName] = useState<string>("");
   const [email, setEmail] = useState<string>("");
@@ -17,43 +21,62 @@ const ModalContent: React.FC<ModalContentProps> = ({ toggleModal }) => {
   const [data, setData] = useState<object | undefined>(undefined);
   const [formError, setFormError] = useState<string | undefined>(undefined);
   const EVENTID = 8;
-  const { resData, error } = useAuthenticatedFetch(
-    "create-users",
-    "POST",
-    data
-  );
 
-  const handleAddSpeaker = () => {
-    const data = {
-      first_name: firstName,
-      last_name: lastName,
-      email: email,
-      event_id: EVENTID,
-      image: photoUrl,
-    };
+  const { resData, postData } = useAuthenticatedFetch();
+  const handleCreateUser = () => {
+    (async () => {
+      const formError = validateForm();
+      if (formError !== "") {
+        setFormError(formError);
+        return;
+      }
+      const data = {
+        first_name: firstName,
+        last_name: lastName,
+        email: email,
+        event_id: EVENTID,
+        image: photoUrl,
+      };
+      await postData("create-users", data);
+
+      setData(data);
+      if (resData) {
+        handleReset();
+      }
+    })().catch((error) => console.log(error));
+  };
+  const validateForm = () => {
+    const nameRegex = /^[a-zA-Z]+$/;
+    const emailRegex = /\S+@\S+\.\S+/;
+
     if (firstName === "" || lastName === "" || email === "") {
-      setFormError("Please fill all the fields");
-      return;
-    }
-    setData(data);
-    if (error) {
-      setFormError(error.message);
+      return "Please fill all the fields";
     }
 
-    if (resData) {
-      handleReset();
+    if (!nameRegex.test(firstName)) {
+      return "Please enter a valid first name";
     }
-    console.log("here is ", resData);
 
+    if (!nameRegex.test(lastName)) {
+      return "Please enter a valid last name";
+    }
+
+    if (!emailRegex.test(email)) {
+      return "Please enter a valid email address";
+    }
+    if (photoUrl === undefined) {
+      return "Please upload a photo";
+    }
+
+    return "";
   };
   const handleReset = () => {
     setFirstName("");
     setLastName("");
     setEmail("");
-    setPhotoUrl(undefined);
-    setFormError(undefined);
+    setPhotoUrl("");
+    setFormError("User created successfully");
   };
-
   const handlePhotoChange = (imageUrl: string | undefined) => {
     setPhotoUrl(imageUrl);
   };
@@ -64,7 +87,7 @@ const ModalContent: React.FC<ModalContentProps> = ({ toggleModal }) => {
       <div className="bg-gray-800 border border-primary-600 p-8 shadow-lg z-10 w-[350px]">
         {formError && <p className="text-error-300">{formError}</p>}
         <div className=" mb-4">
-          <h1 className="text-xl font-bold text-white">Add Speaker</h1>
+          <h1 className="text-xl font-bold text-white">Add {userType}</h1>
         </div>
         <div>
           <div>
@@ -95,7 +118,7 @@ const ModalContent: React.FC<ModalContentProps> = ({ toggleModal }) => {
         </div>
         <div className="flex justify-center gap-5">
           <Button onClick={toggleModal} title="Cancel " style="black" />
-          <Button title="Add" style="white" onClick={handleAddSpeaker} />
+          <Button title="Add" style="white" onClick={handleCreateUser} />
         </div>
       </div>
     </div>

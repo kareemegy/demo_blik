@@ -1,9 +1,15 @@
 import RenderItems from "../RenderItems";
 
+// interface Item {
+//   id: number;
+//   name: string;
+//   imageUrl: string;
+// }
 interface Item {
   id: number;
-  name: string;
-  imageUrl: string;
+  first_name: string;
+  last_name: string;
+  avatar: string;
 }
 
 interface SelectedItemsProps {

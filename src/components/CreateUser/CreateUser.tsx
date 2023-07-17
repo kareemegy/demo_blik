@@ -15,6 +15,7 @@ const CreateUser = ({ userType }: Props) => {
       <ModalContainer
         isModalVisible={isModalVisible}
         toggleModal={toggleModal}
+        userType={userType}
       />
     </>
   );
