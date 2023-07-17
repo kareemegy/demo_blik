@@ -3,10 +3,14 @@ import Upload from "../../assets/uploadIcon.svg";
 import useCloudinaryUpload from "../../hooks/useCloudinaryUpload";
 import Close from "../../assets/closeIcon.svg";
 import Edit from "../../assets/editIcon.svg";
-
+import { useEffect } from "react";
 import { createRef, RefObject } from "react";
+interface ProfileUploadProps {
+  onChange: (imageUrl: string | undefined) => void;
+  restImg: boolean;
+}
 
-const Thumbnail = () => {
+const Thumbnail = ({ onChange, restImg }: ProfileUploadProps) => {
   const { uploadImage, imageUrl, removeImage, isLoading, error } =
     useCloudinaryUpload();
 
@@ -24,7 +28,17 @@ const Thumbnail = () => {
       console.log(dropzoneRef.current);
     }
   };
+  useEffect(() => {
+    if (imageUrl) {
+      onChange(imageUrl);
+    }
+  }, [imageUrl, onChange]);
 
+  useEffect(() => {
+    if (restImg) {
+      removeImage();
+    }
+  }, [restImg]);
   return (
     <div
       {...getRootProps({
