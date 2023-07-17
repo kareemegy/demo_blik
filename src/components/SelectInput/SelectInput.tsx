@@ -14,7 +14,7 @@ const SelectInput = ({ onChange, value, option }: SelectInputProps) => {
         className="w-full appearance-none bg-transparent border border-gray-400 py-3 px-4 pr-8  outline-none placeholder:text-white"
       >
         {option.map((item) => (
-          <option key={item} value={item}>
+          <option defaultValue={item} key={item} value={item}>
             {item}
           </option>
         ))}

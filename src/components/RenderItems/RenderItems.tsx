@@ -1,11 +1,6 @@
 import Delete from "../../assets/delete.svg";
 import avatrPlaceholder from "../../assets/avatar.png";
 
-// interface Item {
-//   id: number;
-//   name: string;
-//   imageUrl: string;
-// }
 interface Item {
   id: number;
   first_name: string;

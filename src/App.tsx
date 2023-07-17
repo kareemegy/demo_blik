@@ -26,8 +26,6 @@ const NewSessionsForm = () => {
   const { postData } = useAuthenticatedFetch();
 
   const handleCreateNewSession = () => {
-    console.log(speakersID, moderatorID);
-
     const formError = validateForm();
     if (formError) {
       setFormError(formError);
@@ -50,7 +48,6 @@ const NewSessionsForm = () => {
       await postData("create-sessions", data);
       handleReset();
       setFormError("Session created successfully");
-      console.log(data);
     })().catch((error) => console.log(error));
   };
   const handleReset = () => {

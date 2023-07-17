@@ -1,10 +1,4 @@
 import RenderItems from "../RenderItems";
-
-// interface Item {
-//   id: number;
-//   name: string;
-//   imageUrl: string;
-// }
 interface Item {
   id: number;
   first_name: string;

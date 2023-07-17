@@ -25,7 +25,6 @@ const Thumbnail = ({ onChange, restImg }: ProfileUploadProps) => {
   const editImage = () => {
     if (dropzoneRef.current) {
       dropzoneRef.current;
-      console.log(dropzoneRef.current);
     }
   };
   useEffect(() => {

@@ -30,20 +30,18 @@ const useLoadMore = (
   const isLoadingRef = useRef<boolean>(false);
   const isInitializedRef = useRef<boolean>(false);
   const [isSearching, setIsSearching] = useState(false);
-
+  const [hasMore, setHasMore] = useState<boolean>(true);
   const fetchMore = useCallback(async () => {
-    console.log(offset, limit);
-
     if (isSearching) return;
     if (isLoadingRef.current) return;
     isLoadingRef.current = true;
 
     try {
-   
       const newData = await fetchData(offset, limit);
       if (newData.length === 0) {
         return;
       }
+      setHasMore(true);
       setData((prevData) => {
         const filteredData = newData.filter((item) => {
           const index = prevData.findIndex(
@@ -56,6 +54,7 @@ const useLoadMore = (
       setOffset((prevOffset: number) => prevOffset + limit);
     } catch (error) {
       console.error(error);
+      setHasMore(false);
     } finally {
       isLoadingRef.current = false;
     }
@@ -79,7 +78,7 @@ const useLoadMore = (
   useEffect(() => {
     const handleObserver = async (entries: IntersectionObserverEntry[]) => {
       if (isSearching) return;
-
+      if (!hasMore) return;
       if (
         entries[0].isIntersecting &&
         !isLoadingRef.current &&

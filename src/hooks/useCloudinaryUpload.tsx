@@ -38,8 +38,8 @@ const useCloudinaryUpload = () => {
       const data = (await response.json()) as CloudinaryResponse;
       setImageUrl(data.secure_url);
     } catch (error) {
-      // const errorMessage = "Something went wrong. Please try again later.";
-      // setError({ error: errorMessage });
+      console.log(error);
+
       console.error(error);
     } finally {
       setIsLoading(false);
