@@ -5,15 +5,23 @@ import { createRef, RefObject, useState, useEffect } from "react";
 
 interface ProfileUploadProps {
   onChange: (imageUrl: string | undefined) => void;
+  restImg: boolean;
 }
-const ProfileUpload = ({ onChange }: ProfileUploadProps) => {
-  const { uploadImage, imageUrl, removeImage, isLoading, error } = useCloudinaryUpload();
+const ProfileUpload = ({ onChange, restImg }: ProfileUploadProps) => {
+  const { uploadImage, imageUrl, removeImage, isLoading, error } =
+    useCloudinaryUpload();
 
   useEffect(() => {
     if (imageUrl) {
       onChange(imageUrl);
     }
   }, [imageUrl, onChange]);
+
+  useEffect(() => {
+    if (restImg) {
+      removeImage();
+    }
+  }, [restImg]);
 
   const { getRootProps, getInputProps } = useDropzone({
     async onDrop(acceptedFiles) {

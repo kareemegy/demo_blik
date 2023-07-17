@@ -18,11 +18,10 @@ const ModalContent: React.FC<ModalContentProps> = ({
   const [lastName, setLastName] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [photoUrl, setPhotoUrl] = useState<string | undefined>(undefined);
-  const [data, setData] = useState<object | undefined>(undefined);
   const [formError, setFormError] = useState<string | undefined>(undefined);
   const EVENTID = 8;
-
-  const { resData, postData } = useAuthenticatedFetch();
+  const [isRestImg, setIsRestImg] = useState(false);
+  const { resData, postData, error } = useAuthenticatedFetch();
   const handleCreateUser = () => {
     (async () => {
       const formError = validateForm();
@@ -30,6 +29,7 @@ const ModalContent: React.FC<ModalContentProps> = ({
         setFormError(formError);
         return;
       }
+      setIsRestImg(false);
       const data = {
         first_name: firstName,
         last_name: lastName,
@@ -38,8 +38,6 @@ const ModalContent: React.FC<ModalContentProps> = ({
         image: photoUrl,
       };
       await postData("create-users", data);
-
-      setData(data);
       if (resData) {
         handleReset();
       }
@@ -67,7 +65,12 @@ const ModalContent: React.FC<ModalContentProps> = ({
     if (photoUrl === undefined) {
       return "Please upload a photo";
     }
+    if (error) {
+      const errorString = error.toString();
+      console.log(error.name, errorString);
 
+      return errorString;
+    }
     return "";
   };
   const handleReset = () => {
@@ -76,6 +79,7 @@ const ModalContent: React.FC<ModalContentProps> = ({
     setEmail("");
     setPhotoUrl("");
     setFormError("User created successfully");
+    setIsRestImg(true);
   };
   const handlePhotoChange = (imageUrl: string | undefined) => {
     setPhotoUrl(imageUrl);
@@ -93,7 +97,7 @@ const ModalContent: React.FC<ModalContentProps> = ({
           <div>
             <h1 className="text-white">Photo</h1>
           </div>
-          <ProfileUpload onChange={handlePhotoChange} />
+          <ProfileUpload onChange={handlePhotoChange} restImg={isRestImg} />
         </div>
         <div>
           <Label label="First Name" />
