@@ -1,7 +1,7 @@
 import { useDropzone } from "react-dropzone";
 import UploadPlaceHolder from "../../assets/UploadPlaceHolder.svg";
 import useCloudinaryUpload from "../../hooks/useCloudinaryUpload";
-import { createRef, RefObject, useState, useEffect } from "react";
+import { createRef, RefObject, useEffect } from "react";
 
 interface ProfileUploadProps {
   onChange: (imageUrl: string | undefined) => void;
