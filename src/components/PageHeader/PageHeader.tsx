@@ -6,7 +6,7 @@ interface Props {
 const PageHeader = ({ sendForm }: Props) => {
   return (
     <div className="container mx-auto flex justify-between items-center py-10 px-10">
-      <div>
+      <div className="pr-3">
         <p className="text-white">New Sessions </p>
       </div>
       <div className="flex gap">

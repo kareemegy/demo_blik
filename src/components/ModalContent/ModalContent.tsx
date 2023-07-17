@@ -21,7 +21,7 @@ const ModalContent: React.FC<ModalContentProps> = ({
   const [formError, setFormError] = useState<string | undefined>(undefined);
   const EVENTID = 8;
   const [isRestImg, setIsRestImg] = useState(false);
-  const { resData, postData, error } = useAuthenticatedFetch();
+  const { postData, error } = useAuthenticatedFetch();
   const handleCreateUser = () => {
     (async () => {
       const formError = validateForm();
@@ -38,16 +38,16 @@ const ModalContent: React.FC<ModalContentProps> = ({
         image: photoUrl,
       };
       await postData("create-users", data);
-      if (resData) {
         handleReset();
-      }
+        setFormError("User created successfully");
+
     })().catch((error) => console.log(error));
   };
   const validateForm = () => {
     const nameRegex = /^[a-zA-Z]+$/;
     const emailRegex = /\S+@\S+\.\S+/;
 
-    if (firstName === "" || lastName === "" || email === "") {
+    if (firstName === "" || lastName === "" || email === "" ) {
       return "Please fill all the fields";
     }
 
@@ -68,8 +68,6 @@ const ModalContent: React.FC<ModalContentProps> = ({
     if (error) {
       const errorString = error.toString();
       console.log(error.name, errorString);
-
-      return errorString;
     }
     return "";
   };

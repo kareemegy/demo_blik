@@ -20,9 +20,19 @@ const NewSessionsForm = () => {
   const [speakersID, setSpeakersID] = useState<number[]>([]);
   const [moderatorID, setModeratorID] = useState<number[]>([]);
   const [restUsers, setRestUsers] = useState<number[]>([]);
+  const [formError, setFormError] = useState<string | undefined>(undefined);
+
   const event_id = 8;
-  const { resData, postData } = useAuthenticatedFetch();
+  const { postData } = useAuthenticatedFetch();
+
   const handleCreateNewSession = () => {
+    console.log(speakersID, moderatorID);
+
+    const formError = validateForm();
+    if (formError) {
+      setFormError(formError);
+      return;
+    }
     (async () => {
       setIsRestImg(false);
       const data = {
@@ -38,9 +48,8 @@ const NewSessionsForm = () => {
         event_id: event_id,
       };
       await postData("create-sessions", data);
-      if (resData) {
-        handleReset();
-      }
+      handleReset();
+      setFormError("Session created successfully");
       console.log(data);
     })().catch((error) => console.log(error));
   };
@@ -52,10 +61,43 @@ const NewSessionsForm = () => {
     setFrom("");
     setTill("");
     setDescription("");
+    setIsRestImg(true);
     setSpeakersID([]);
     setModeratorID([]);
-    setIsRestImg(true);
     setRestUsers([]);
+  };
+  const validateForm = () => {
+    const text = /^[a-zA-Z]+$/;
+    if (
+      title === "" ||
+      subtitle === "" ||
+      date === "" ||
+      from === "" ||
+      till === "" ||
+      description === ""
+    ) {
+      return "Please fill all the fields";
+    }
+    if (!text.test(title)) {
+      return "Title should contain only letters";
+    }
+    if (photoUrl === undefined) {
+      return "Please select a thumbnail";
+    }
+    if (!text.test(subtitle)) {
+      return "Subtitle should contain only letters";
+    }
+    if (speakersID.length === 0) {
+      return "Please select at least one speaker";
+    }
+    if (moderatorID.length === 0) {
+      return "Please select at least one moderator";
+    }
+    if (photoUrl === undefined) {
+      return "Please select a thumbnail";
+    }
+
+    return "";
   };
 
   const handlePhotoChange = (imageUrl: string | undefined) => {
@@ -65,6 +107,7 @@ const NewSessionsForm = () => {
     <div className="bg-black">
       <PageHeader sendForm={handleCreateNewSession} />
       <div className="container mx-auto max-w-4xl bg-gray-800 p-10  ">
+        {formError && <p className="text-error-300">{formError}</p>}
         <Label label="Session Title" />
         <InputField
           value={title}
@@ -82,7 +125,7 @@ const NewSessionsForm = () => {
         />
         <Label label="Thumbnail" />
         <Thumbnail onChange={handlePhotoChange} restImg={isRestImg} />
-        <div className="mt-10 mb-10 grid grid-cols-3 gap-2">
+        <div className="mt-10 mb-10 grid grid-cols-1 md:grid-cols-3 gap-2">
           <div>
             <Label label="Date" />
             <SelectInput

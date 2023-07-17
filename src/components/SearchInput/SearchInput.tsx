@@ -17,7 +17,7 @@ const SearchInput = ({
 
   return (
     <input
-      className="bg-transparent outline-none placeholder:text-white"
+      className="bg-transparent outline-none my-5 placeholder:text-white"
       type="text"
       name="search"
       id="search"

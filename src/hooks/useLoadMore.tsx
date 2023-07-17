@@ -1,10 +1,10 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 
 interface Item {
-  id: number;                 
-  first_name: string;                 
-  last_name: string;                  
-  avatar: string;                 
+  id: number;
+  first_name: string;
+  last_name: string;
+  avatar: string;
 }
 
 interface LoadMoreResponse {
@@ -39,6 +39,7 @@ const useLoadMore = (
     isLoadingRef.current = true;
 
     try {
+   
       const newData = await fetchData(offset, limit);
       if (newData.length === 0) {
         return;

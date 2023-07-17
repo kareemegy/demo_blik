@@ -10,14 +10,14 @@ const CreateUser = ({ userType }: Props) => {
     setIsModalVisible(!isModalVisible);
   };
   return (
-    <>
+    <div className="my-5">
       <CreateUserButton userType={userType} toggleModal={toggleModal} />
       <ModalContainer
         isModalVisible={isModalVisible}
         toggleModal={toggleModal}
         userType={userType}
       />
-    </>
+    </div>
   );
 };
 export default CreateUser;

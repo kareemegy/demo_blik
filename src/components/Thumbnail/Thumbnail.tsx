@@ -1,10 +1,10 @@
 import { useDropzone } from "react-dropzone";
-import Upload from "../../assets/uploadIcon.svg";
 import useCloudinaryUpload from "../../hooks/useCloudinaryUpload";
 import Close from "../../assets/closeIcon.svg";
 import Edit from "../../assets/editIcon.svg";
 import { useEffect } from "react";
 import { createRef, RefObject } from "react";
+import ImageUploadPrompt from "../ImageUploadPrompt/ImageUploadPrompt";
 interface ProfileUploadProps {
   onChange: (imageUrl: string | undefined) => void;
   restImg: boolean;
@@ -86,21 +86,3 @@ const Thumbnail = ({ onChange, restImg }: ProfileUploadProps) => {
 };
 
 export default Thumbnail;
-const ImageUploadPrompt = () => {
-  return (
-    <div className="flex flex-col items-center h-[190px] py-10">
-      <img className="w-16 h-16 mb-3" src={Upload} alt="upload icon" />
-      <div className="text-center">
-        <p className="text-gray-300 text-lg">
-          <span className="font-bold text-primary-50 text-lg ">
-            Click to upload
-          </span>{" "}
-          or drag and drop
-        </p>
-        <p className="text-gray-300 text-lg">
-          SVG, PNG, JPG or GIF (max. 800x400px)
-        </p>
-      </div>
-    </div>
-  );
-};

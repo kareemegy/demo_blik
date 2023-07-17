@@ -31,7 +31,8 @@ const MultiselectInput = ({ userType, getIds, restUsers }: Props) => {
   };
   useEffect(() => {
     getIds(getUsersIds());
-  }, [SelectedItems]);
+  }, [selectedItems]);
+
   useEffect(() => {
     setSelectedItems([]);
   }, [restUsers]);
